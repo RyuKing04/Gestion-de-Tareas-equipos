@@ -46,7 +46,7 @@ project-root/
 
 ### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/tu-usuario/taskboard.git
+git clone https://github.com/RyuKing04/Gestion-de-Tareas-equipos.git
 cd taskboard
 ```
 
