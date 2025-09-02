@@ -11,6 +11,7 @@ Aplicación web fullstack inspirada en Trello. Permite a los usuarios registrars
 - Vite
 - TypeScript
 - Axios
+- Bootstrap 5
 
 ### 🔧 Backend (server/)
 - Node.js
@@ -26,14 +27,21 @@ Aplicación web fullstack inspirada en Trello. Permite a los usuarios registrars
 
 ```
 project-root/
-├── client/         → Vue + Vite (Frontend)
-├── server/         → Node + Express (Backend)
+├── client/                 → Vue + Vite (Frontend)
+│   ├── src/
+│   │   ├── components/     ← Componentes Vue
+│   │   │   ├── Login.vue           ← Formulario de autenticación
+│   │   │   └── PublishingPlatformBoard.vue  ← Tablero principal estilo Kanban
+│   │   ├── router/         ← Configuración de rutas
+│   │   ├── services/       ← Servicios API (authService, etc.)
+│   │   └── App.vue         ← Componente principal
+├── server/                 → Node + Express (Backend)
 │   ├── controllers/
 │   ├── models/
 │   ├── routes/
 │   ├── middleware/
 │   ├── utils/
-│   ├── .env            ← ❌ no se sube a GitHub
+│   ├── .env                ← Variables de entorno (no subir a GitHub)
 │   ├── app.js
 │   └── server.js
 ├── README.md
@@ -125,15 +133,39 @@ Iniciar sesión:
 
 ---
 
-## 📌 Roadmap
+## 📌 Estado Actual del Proyecto
 
-- [x] Backend con autenticación JWT
-- [ ] CRUD de tableros
-- [ ] CRUD de tareas
-- [ ] Drag & drop de tareas
-- [ ] Compartir tableros
-- [ ] Filtros y búsqueda
-- [ ] Despliegue en Render (backend) y Vercel (frontend)
+✅ Funcionalidades Implementadas
+Sistema de autenticación completo (login/registro)
+
+Frontend Vue 3 con TypeScript y Composition API
+
+Diseño responsive con Bootstrap 5
+
+Rutas protegidas con Vue Router
+
+Interfaz de tablero Kanban (PublishingPlatformBoard)
+
+Conexión backend-frontend con Axios
+
+Manejo de estado con localStorage para tokens JWT
+
+🚧 Próximas Funcionalidades
+CRUD completo de tableros
+
+CRUD de tareas con drag & drop
+
+Sistema de asignación de tareas a usuarios
+
+Compartir tableros con equipo
+
+Filtros y búsqueda avanzada
+
+Notificaciones en tiempo real
+
+Despliegue en producción
+
+
 
 ---
 
