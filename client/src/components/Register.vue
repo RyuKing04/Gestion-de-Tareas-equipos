@@ -177,7 +177,7 @@ const goToLogin = () => {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+  background: linear-gradient(135deg, #0d505a 0%, #1e4d58 100%);
   padding: 20px;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
@@ -197,7 +197,7 @@ const goToLogin = () => {
   padding: 35px 30px 25px;
   text-align: center;
   border-bottom: 1px solid #e2e8f0;
-  background: linear-gradient(135deg, #1e4d2b 0%, #0d7c58 100%);
+  background: linear-gradient(135deg, #1e4d58 0%, #0d505a 100%);
   color: white;
 }
 
@@ -217,7 +217,7 @@ const goToLogin = () => {
   font-size: 28px;
   font-weight: 800;
   background: white;
-  color: #0d7c58;
+  color: #0d505a;
   width: 40px;
   height: 40px;
   border-radius: 8px;
@@ -270,7 +270,7 @@ const goToLogin = () => {
   display: block;
   margin-bottom: 10px;
   font-weight: 600;
-  color: #2d3748;
+  color: #1e4d58;
   font-size: 14px;
   display: flex;
   align-items: center;
@@ -278,7 +278,7 @@ const goToLogin = () => {
 }
 
 .form-group label i {
-  color: #0d7c58;
+  color: #0d505a;
   width: 16px;
 }
 
@@ -295,8 +295,8 @@ const goToLogin = () => {
 
 .form-input:focus {
   outline: none;
-  border-color: #0d7c58;
-  box-shadow: 0 0 0 3px rgba(13, 124, 88, 0.1);
+  border-color: #0d505a;
+  box-shadow: 0 0 0 3px rgba(13, 80, 90, 0.1);
   background: white;
 }
 
@@ -307,7 +307,7 @@ const goToLogin = () => {
 .register-button {
   width: 100%;
   padding: 16px;
-  background: linear-gradient(135deg, #1e4d2b 0%, #0d7c58 100%);
+  background: linear-gradient(135deg, #1e4d58 0%, #0d505a 100%);
   color: white;
   border: none;
   border-radius: 10px;
@@ -316,12 +316,12 @@ const goToLogin = () => {
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 10px;
-  box-shadow: 0 4px 12px rgba(13, 124, 88, 0.3);
+  box-shadow: 0 4px 12px rgba(13, 80, 90, 0.3);
 }
 
 .register-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(13, 124, 88, 0.4);
+  box-shadow: 0 6px 20px rgba(13, 80, 90, 0.4);
 }
 
 .register-button:active:not(:disabled) {
@@ -384,12 +384,12 @@ const goToLogin = () => {
 
 .register-footer p {
   margin: 0;
-  color: #666;
+  color: #838383;
   font-size: 14px;
 }
 
 .footer-link {
-  color: #0d7c58;
+  color: #0d505a;
   text-decoration: none;
   font-weight: 600;
   cursor: pointer;
@@ -397,7 +397,7 @@ const goToLogin = () => {
 }
 
 .footer-link:hover {
-  color: #1e4d2b;
+  color: #1e4d58;
   text-decoration: underline;
 }
 

@@ -51,9 +51,9 @@ const handleLogout = () => {
 <style>
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
-/* Navbar personalizada con color azul del logo */
+/* Navbar personalizada con nueva paleta de colores */
 .custom-navbar {
-  background: linear-gradient(135deg, #1e4d2b 0%, #0d7c58 100%) !important;
+  background: linear-gradient(135deg, #1e4d58 0%, #0d505a 100%) !important;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
   padding: 0.5rem 1rem;
 }
@@ -72,7 +72,7 @@ const handleLogout = () => {
   font-size: 24px;
   font-weight: 800;
   background: white;
-  color: #0d7c58;
+  color: #0d505a;
   width: 32px;
   height: 32px;
   border-radius: 6px;

@@ -602,7 +602,7 @@ onMounted(() => {
 
 .tickets-dashboard {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0d7c58 0%, #1e4d2b 100%);
+  background: linear-gradient(135deg, #0d505a 0%, #1e4d58 100%);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   padding: 20px;
 }
@@ -615,7 +615,7 @@ onMounted(() => {
   margin-bottom: 24px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
-  border-left: 5px solid #0d7c58;
+  border-left: 5px solid #0d505a;
 }
 
 .header-content {
@@ -635,7 +635,7 @@ onMounted(() => {
   align-items: center;
   gap: 12px;
   padding: 10px 16px;
-  background: linear-gradient(135deg, #0d7c58 0%, #1e4d2b 100%);
+  background: linear-gradient(135deg, #0d505a 0%, #1e4d58 100%);
   border-radius: 12px;
   color: white;
 }
@@ -644,7 +644,7 @@ onMounted(() => {
   font-size: 32px;
   font-weight: 800;
   background: white;
-  color: #0d7c58;
+  color: #0d505a;
   width: 40px;
   height: 40px;
   border-radius: 8px;
@@ -673,7 +673,7 @@ onMounted(() => {
 .header-title h1 {
   font-size: 28px;
   font-weight: 700;
-  color: #1e4d2b;
+  color: #1e4d58;
   margin-bottom: 4px;
   display: flex;
   align-items: center;
@@ -681,11 +681,11 @@ onMounted(() => {
 }
 
 .header-title h1 i {
-  color: #0d7c58;
+  color: #0d505a;
 }
 
 .header-title p {
-  color: #666;
+  color: #838383;
   font-size: 14px;
   margin: 0;
 }
@@ -697,7 +697,7 @@ onMounted(() => {
 
 /* Buttons - Nueva paleta */
 .btn-primary {
-  background: linear-gradient(135deg, #0d7c58 0%, #1e4d2b 100%);
+  background: linear-gradient(135deg, #0d505a 0%, #1e4d58 100%);
   color: white;
   border: none;
   padding: 12px 24px;
@@ -712,13 +712,13 @@ onMounted(() => {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(13, 124, 88, 0.4);
+  box-shadow: 0 8px 25px rgba(13, 80, 90, 0.4);
 }
 
 .btn-secondary {
   background: #e8f5f0;
-  border: 2px solid #0d7c58;
-  color: #0d7c58;
+  border: 2px solid #0d505a;
+  color: #0d505a;
   padding: 12px;
   border-radius: 10px;
   cursor: pointer;
@@ -726,7 +726,7 @@ onMounted(() => {
 }
 
 .btn-secondary:hover {
-  background: #0d7c58;
+  background: #0d505a;
   color: white;
   transform: rotate(180deg);
 }
@@ -734,7 +734,7 @@ onMounted(() => {
 .btn-outline {
   background: transparent;
   border: 2px solid #e2e8f0;
-  color: #718096;
+  color: #6f9096;
   padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
@@ -754,7 +754,7 @@ onMounted(() => {
   padding: 20px;
   margin-bottom: 24px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border-left: 4px solid #1e4d2b;
+  border-left: 4px solid #1e4d58;
 }
 
 .filters-content {
@@ -771,7 +771,7 @@ onMounted(() => {
 
 .filter-label {
   font-weight: 600;
-  color: #1e4d2b;
+  color: #1e4d58;
   font-size: 14px;
 }
 
@@ -801,8 +801,8 @@ onMounted(() => {
 .filter-btn.active {
   font-weight: 600;
   background: #e8f5f0;
-  border-color: #0d7c58;
-  color: #1e4d2b;
+  border-color: #0d505a;
+  color: #1e4d58;
 }
 
 .filter-new.active {
@@ -824,7 +824,7 @@ onMounted(() => {
 }
 
 .count-badge {
-  background: #0d7c58;
+  background: #0d505a;
   color: white;
   padding: 2px 8px;
   border-radius: 12px;
@@ -851,12 +851,12 @@ onMounted(() => {
   display: block;
   font-size: 24px;
   font-weight: 700;
-  color: #0d7c58;
+  color: #0d505a;
 }
 
 .stat-label {
   font-size: 12px;
-  color: #666;
+  color: #838383;
   text-transform: uppercase;
   font-weight: 600;
 }
@@ -884,7 +884,7 @@ onMounted(() => {
   max-height: 90vh;
   overflow: hidden;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-  border-top: 4px solid #0d7c58;
+  border-top: 4px solid #0d505a;
 }
 
 .modal-header {
@@ -897,7 +897,7 @@ onMounted(() => {
 
 .modal-header h2 {
   margin: 0;
-  color: #1e4d2b;
+  color: #1e4d58;
   font-size: 20px;
   display: flex;
   align-items: center;
@@ -909,7 +909,7 @@ onMounted(() => {
   border: none;
   font-size: 20px;
   cursor: pointer;
-  color: #718096;
+  color: #6f9096;
   padding: 8px;
   border-radius: 8px;
   transition: all 0.3s ease;
@@ -931,7 +931,7 @@ onMounted(() => {
 .form-group label {
   display: block;
   margin-bottom: 8px;
-  color: #1e4d2b;
+  color: #1e4d58;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -950,8 +950,8 @@ onMounted(() => {
 
 .form-input:focus, .form-textarea:focus, .form-select:focus {
   outline: none;
-  border-color: #0d7c58;
-  box-shadow: 0 0 0 3px rgba(13, 124, 88, 0.1);
+  border-color: #0d505a;
+  box-shadow: 0 0 0 3px rgba(13, 80, 90, 0.1);
 }
 
 .form-textarea {
@@ -986,7 +986,7 @@ onMounted(() => {
 
 .add-member-btn {
   padding: 12px 16px;
-  background: #0d7c58;
+  background: #0d505a;
   color: white;
   border: none;
   border-radius: 8px;
@@ -1001,7 +1001,7 @@ onMounted(() => {
 }
 
 .add-member-btn:hover:not(:disabled) {
-  background: #1e4d2b;
+  background: #1e4d58;
 }
 
 .selected-members {
@@ -1018,11 +1018,11 @@ onMounted(() => {
   align-items: center;
   margin-bottom: 10px;
   font-weight: 600;
-  color: #1e4d2b;
+  color: #1e4d58;
 }
 
 .members-count {
-  background: #0d7c58;
+  background: #0d505a;
   color: white;
   padding: 2px 8px;
   border-radius: 12px;
@@ -1042,7 +1042,7 @@ onMounted(() => {
   gap: 8px;
   background: white;
   padding: 6px 12px;
-  border: 1px solid #0d7c58;
+  border: 1px solid #0d505a;
   border-radius: 20px;
   font-size: 14px;
   background: #e8f5f0;
@@ -1051,7 +1051,7 @@ onMounted(() => {
 .remove-member-btn {
   background: none;
   border: none;
-  color: #718096;
+  color: #6f9096;
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
@@ -1159,7 +1159,7 @@ onMounted(() => {
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
-  color: #718096;
+  color: #6f9096;
 }
 
 .btn-icon:hover {
@@ -1180,13 +1180,13 @@ onMounted(() => {
 .ticket-title {
   font-size: 16px;
   font-weight: 600;
-  color: #1e4d2b;
+  color: #1e4d58;
   margin-bottom: 12px;
   line-height: 1.4;
 }
 
 .ticket-description {
-  color: #666;
+  color: #838383;
   font-size: 14px;
   line-height: 1.5;
   margin-bottom: 16px;
@@ -1203,7 +1203,7 @@ onMounted(() => {
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  color: #666;
+  color: #838383;
 }
 
 .meta-label {
@@ -1223,7 +1223,7 @@ onMounted(() => {
 }
 
 .priority-icon.priority-baja {
-  color: #0d7c58;
+  color: #0d505a;
 }
 
 /* Estilos para mostrar miembros en los tickets */
@@ -1239,7 +1239,7 @@ onMounted(() => {
 }
 
 .member-chip {
-  background: #0d7c58;
+  background: #0d505a;
   color: white;
   padding: 2px 8px;
   border-radius: 12px;
@@ -1248,7 +1248,7 @@ onMounted(() => {
 }
 
 .more-members {
-  background: #718096;
+  background: #6f9096;
 }
 
 .ticket-footer {
@@ -1262,7 +1262,7 @@ onMounted(() => {
 
 .ticket-id {
   font-size: 11px;
-  color: #666;
+  color: #838383;
   font-family: 'Courier New', monospace;
   font-weight: 600;
 }
@@ -1292,12 +1292,12 @@ onMounted(() => {
 
 .priority-badge.priority-baja {
   background: #e8f5f0;
-  color: #0d7c58;
+  color: #0d505a;
 }
 
 .members-badge {
   background: #e8f5f0;
-  color: #0d7c58;
+  color: #0d505a;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -1313,7 +1313,7 @@ onMounted(() => {
 }
 
 .ticket-card.priority-baja {
-  border-left: 4px solid #0d7c58;
+  border-left: 4px solid #0d505a;
 }
 
 /* Loading and empty states */
