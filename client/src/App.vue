@@ -23,9 +23,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <button @click="handleLogout" class="btn btn-outline-light btn-sm">
-                <i class="fas fa-sign-out-alt me-1"></i> Cerrar Sesión
-              </button>
+              
             </li>
           </ul>
         </div>
