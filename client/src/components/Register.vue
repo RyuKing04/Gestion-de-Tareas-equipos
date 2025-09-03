@@ -1,12 +1,24 @@
 <template>
-  <div class="login-container">
-    <div class="login-card">
-      <div class="login-header">
-        <h1>Iniciar Sesión</h1>
-        <p>Ingresa a tu cuenta de Encoding example.com</p>
+  <div class="register-container">
+    <div class="register-card">
+      <div class="register-header">
+        <h1>Crear Cuenta</h1>
+        <p>Únete a Encoding example.com</p>
       </div>
       
-      <form @submit.prevent="handleLogin" class="login-form">
+      <form @submit.prevent="handleRegister" class="register-form">
+        <div class="form-group">
+          <label for="name">Nombre completo</label>
+          <input 
+            id="name"
+            v-model="name" 
+            type="text" 
+            placeholder="Tu nombre completo" 
+            required 
+            class="form-input"
+          />
+        </div>
+        
         <div class="form-group">
           <label for="email">Correo electrónico</label>
           <input 
@@ -25,14 +37,26 @@
             id="password"
             v-model="password" 
             type="password" 
-            placeholder="Ingresa tu contraseña" 
+            placeholder="Crea una contraseña segura" 
             required 
             class="form-input"
           />
         </div>
         
-        <button type="submit" :disabled="loading" class="login-button">
-          <span v-if="!loading">Iniciar Sesión</span>
+        <div class="form-group">
+          <label for="confirmPassword">Confirmar Contraseña</label>
+          <input 
+            id="confirmPassword"
+            v-model="confirmPassword" 
+            type="password" 
+            placeholder="Repite tu contraseña" 
+            required 
+            class="form-input"
+          />
+        </div>
+        
+        <button type="submit" :disabled="loading" class="register-button">
+          <span v-if="!loading">Crear Cuenta</span>
           <span v-else class="loading-spinner">Procesando...</span>
         </button>
       </form>
@@ -41,8 +65,12 @@
         {{ errorMessage }}
       </div>
       
-      <div class="login-footer">
-        <p>¿No tienes una cuenta? <a href="#" @click.prevent="goToRegister" class="footer-link">Regístrate ahora</a></p>
+      <div v-if="successMessage" class="success-message">
+        {{ successMessage }}
+      </div>
+      
+      <div class="register-footer">
+        <p>¿Ya tienes una cuenta? <a href="#" @click.prevent="goToLogin" class="footer-link">Inicia Sesión</a></p>
       </div>
     </div>
   </div>
@@ -51,50 +79,70 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { login } from '../services/authService'
+import { register } from '../services/authService'
 
+const name = ref('')
 const email = ref('')
 const password = ref('')
+const confirmPassword = ref('')
 const loading = ref(false)
 const errorMessage = ref('')
+const successMessage = ref('')
 const router = useRouter()
 
-const handleLogin = async () => {
+const handleRegister = async () => {
+  // Validaciones básicas
+  if (password.value !== confirmPassword.value) {
+    errorMessage.value = 'Las contraseñas no coinciden'
+    return
+  }
+
+  if (password.value.length < 6) {
+    errorMessage.value = 'La contraseña debe tener al menos 6 caracteres'
+    return
+  }
+
   loading.value = true
   errorMessage.value = ''
-  
+  successMessage.value = ''
+
   try {
-    const usuario = await login(email.value, password.value)
-    console.log('Login exitoso:', usuario)
+    const result = await register(name.value, email.value, password.value)
+    console.log('Registro exitoso:', result)
     
-    // Redirigir al dashboard después de login exitoso
-    router.push('/dashboard')
+    // Mostrar mensaje de éxito
+    successMessage.value = '¡Cuenta creada exitosamente! Redirigiendo...'
+    
+    // Redirigir después de 2 segundos
+    setTimeout(() => {
+      router.push('/login')
+    }, 2000)
+    
   } catch (error: any) {
-    console.error('Error en login:', error)
+    console.error('Error en registro:', error)
     
     if (error.response) {
       // Error del servidor con respuesta
-      errorMessage.value = error.response.data.message || 'Error en el servidor'
+      errorMessage.value = error.response.data?.message || 'Error en el servidor durante el registro'
     } else if (error.request) {
       // Error de conexión (sin respuesta)
-      errorMessage.value = 'Error de conexión con el servidor'
+      errorMessage.value = 'Error de conexión con el servidor. Verifica que el servidor esté ejecutándose.'
     } else {
       // Otro tipo de error
-      errorMessage.value = 'Error inesperado'
+      errorMessage.value = error.message || 'Error inesperado al crear la cuenta'
     }
   } finally {
     loading.value = false
   }
 }
 
-// Función para redirigir a la página de registro
-const goToRegister = () => {
-  router.push('/register')
+const goToLogin = () => {
+  router.push('/login')
 }
 </script>
 
 <style scoped>
-.login-container {
+.register-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -104,35 +152,35 @@ const goToRegister = () => {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.login-card {
+.register-card {
   background: white;
   border-radius: 12px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 420px;
+  max-width: 450px;
   overflow: hidden;
 }
 
-.login-header {
+.register-header {
   padding: 30px 30px 20px;
   text-align: center;
   border-bottom: 1px solid #f0f0f0;
 }
 
-.login-header h1 {
+.register-header h1 {
   margin: 0 0 10px;
   color: #333;
   font-weight: 600;
   font-size: 28px;
 }
 
-.login-header p {
+.register-header p {
   margin: 0;
   color: #666;
   font-size: 16px;
 }
 
-.login-form {
+.register-form {
   padding: 30px;
 }
 
@@ -164,7 +212,7 @@ const goToRegister = () => {
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-.login-button {
+.register-button {
   width: 100%;
   padding: 14px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -178,12 +226,12 @@ const goToRegister = () => {
   margin-top: 10px;
 }
 
-.login-button:hover:not(:disabled) {
+.register-button:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
 
-.login-button:disabled {
+.register-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
@@ -205,13 +253,23 @@ const goToRegister = () => {
   font-size: 14px;
 }
 
-.login-footer {
+.success-message {
+  background-color: #efe;
+  color: #363;
+  padding: 12px;
+  margin: 0 30px;
+  border-radius: 6px;
+  border-left: 4px solid #363;
+  font-size: 14px;
+}
+
+.register-footer {
   padding: 20px 30px 30px;
   text-align: center;
   border-top: 1px solid #f0f0f0;
 }
 
-.login-footer p {
+.register-footer p {
   margin: 10px 0;
   color: #666;
   font-size: 14px;
@@ -229,15 +287,15 @@ const goToRegister = () => {
 }
 
 @media (max-width: 480px) {
-  .login-card {
+  .register-card {
     max-width: 100%;
   }
   
-  .login-form {
+  .register-form {
     padding: 20px;
   }
   
-  .error-message {
+  .error-message, .success-message {
     margin: 0 20px;
   }
 }

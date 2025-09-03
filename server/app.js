@@ -5,7 +5,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';  
-
+import boardRoutes from './routes/boardRoutes.js'
 const app = express();
 
 app.use(cors());
@@ -13,6 +13,7 @@ app.use(express.json());
 
 // ✅ Rutas de autenticación
 app.use('/api', authRoutes);
+app.use('/api/boards', boardRoutes)
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {

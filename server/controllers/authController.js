@@ -1,47 +1,79 @@
-import User from "../models/User.js";
-import bcrypt from "bcryptjs";
-import generateToken from "../utils/generateToken.js";
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
 
-export const register= async (req, res) => {
+// Generar token JWT
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: '30d',
+  });
+};
+
+export const register = async (req, res) => {
+  try {
     const { nombre, email, password } = req.body;
-    try {
-        // Verificar si el usuario ya existe
-        const existingUser = await User.findOne({ email });
-        if(existingUser) return res.status(400).json({ message: "Usuario ya existe" });
 
-        const hasedPassword= await bcrypt.hash(password,10);
-        const usuarioNuevo=  await User.create({
-            nombre,
-            email,
-            password: hasedPassword,  
-        });
-
-        // Generar token
-        const token= generateToken(usuarioNuevo._id);
-        res.status(201).json({
-            usuario: usuarioNuevo, token
-        });
-    } catch (error) {
-        console.error("Error al registrar usuario:", error);
-        res.status(500).json({ message: "Error al registrar usuario" });
+    // Verificar si el usuario ya existe
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).json({ message: 'El usuario ya existe' });
     }
+
+    // Crear nuevo usuario
+    const user = await User.create({
+      nombre,
+      email,
+      password,
+    });
+
+    res.status(201).json({
+      _id: user._id,
+      nombre: user.nombre,
+      email: user.email,
+      token: generateToken(user._id),
+    });
+  } catch (error) {
+    console.error('Error en register:', error);
+    res.status(500).json({ message: 'Error del servidor' });
+  }
 };
 
 export const login = async (req, res) => {
+  try {
     const { email, password } = req.body;
-    try {
-        // Verificar si el usuario existe
-        const usuario = await User.findOne({ email });
-        if (!usuario) return res.status(400).json({ message: "Usuario no encontrado" });
-        // Verificar la contraseña
-        const valido = await bcrypt.compare(password, usuario.password);
-        if (!valido) return res.status(400).json({ message: "Contraseña incorrecta" });
-        // Generar token
-        const token= generateToken(usuario._id);
-        res.status(200).json({
-            usuario,token});
-    } catch (error) {
-        console.error("Error al iniciar sesión:", error);
-        res.status(500).json({ message: "Error al iniciar sesión" });
-    }   
+
+    // Buscar usuario
+    const user = await User.findOne({ email });
+    
+    // Verificar usuario y contraseña (sin bcrypt por ahora)
+    if (!user) {
+      return res.status(401).json({ message: 'Email o contraseña inválidos' });
+    }
+
+    // Comparación simple de contraseña (para desarrollo)
+    if (user.password !== password) {
+      return res.status(401).json({ message: 'Email o contraseña inválidos' });
+    }
+
+    res.json({
+      _id: user._id,
+      nombre: user.nombre,
+      email: user.email,
+      token: generateToken(user._id),
+    });
+  } catch (error) {
+    console.error('Error en login:', error);
+    res.status(500).json({ message: 'Error del servidor' });
+  }
+};
+// controllers/userController.js
+export const getUsers = async (req, res) => {
+  try {
+    const users = await User.find({}, 'nombre email')
+      .sort({ nombre: 1 });
+    
+    res.json(users);
+  } catch (error) {
+    console.error('Error getting users:', error);
+    res.status(500).json({ message: 'Error al obtener usuarios' });
+  }
 };

@@ -1,9 +1,17 @@
 <template>
   <div id="app">
-    <!-- Navbar de Bootstrap -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <!-- Navbar de Bootstrap - ACTUALIZADO con color azul del logo -->
+    <nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Mi Aplicación</a>
+        <a class="navbar-brand" href="#">
+          <div class="logo-container">
+            <span class="logo-text">2</span>
+            <div class="logo-details">
+              <span class="logo-country">COSTA RICA</span>
+              <span class="logo-company">REAL ESTATE</span>
+            </div>
+          </div>
+        </a>
         <button 
           class="navbar-toggler" 
           type="button" 
@@ -16,7 +24,7 @@
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
               <button @click="handleLogout" class="btn btn-outline-light btn-sm">
-                Cerrar Sesión
+                <i class="fas fa-sign-out-alt me-1"></i> Cerrar Sesión
               </button>
             </li>
           </ul>
@@ -43,8 +51,91 @@ const handleLogout = () => {
 </script>
 
 <style>
-/* Estilos globales adicionales si los necesitas */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+/* Navbar personalizada con color azul del logo */
+.custom-navbar {
+  background: linear-gradient(135deg, #1e4d2b 0%, #0d7c58 100%) !important;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: white;
+}
+
+.logo-text {
+  font-size: 24px;
+  font-weight: 800;
+  background: white;
+  color: #0d7c58;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-details {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.logo-country {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.logo-company {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Estilos globales */
 body {
   background-color: #f8f9fa;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Mejoras visuales para el botón de logout */
+.btn-outline-light {
+  border-width: 2px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  .logo-container {
+    padding: 6px 8px;
+  }
+  
+  .logo-text {
+    font-size: 20px;
+    width: 28px;
+    height: 28px;
+  }
+  
+  .logo-country {
+    font-size: 9px;
+  }
+  
+  .logo-company {
+    font-size: 11px;
+  }
 }
 </style>
