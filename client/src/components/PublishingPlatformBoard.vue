@@ -72,148 +72,328 @@
     </div>
 
     <!-- Modal para crear ticket - ACTUALIZADO CON SELECTOR DE MIEMBROS -->
-    <div
-      v-if="showCreateModal"
-      class="modal-overlay"
-      @click.self="showCreateModal = false"
-    >
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>
-            <i class="fas fa-plus-circle"></i>
-            Crear Nuevo Ticket
-          </h2>
-          <button @click="showCreateModal = false" class="close-btn">
-            <i class="fas fa-times"></i>
-          </button>
+   <!-- Modal para crear ticket -->
+<div v-if="showCreateModal" class="modal-overlay" @click.self="showCreateModal = false">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2><i class="fas fa-plus-circle"></i> Crear Nuevo Ticket</h2>
+      <button @click="showCreateModal = false" class="close-btn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- CONTENIDO CON SCROLL -->
+    <div class="modal-body-scrollable">
+      <div class="modal-body-content">
+        <!-- Título -->
+        <div class="form-group">
+          <label for="ticket-title">
+            <i class="fas fa-heading"></i>
+            Título del Ticket *
+          </label>
+          <input
+            id="ticket-title"
+            v-model="newBoardName"
+            type="text"
+            placeholder="Ej: Solicitud de acceso al sistema"
+            class="form-input"
+            required
+          />
         </div>
 
-        <div class="modal-body">
+        <!-- Descripción -->
+        <div class="form-group">
+          <label for="ticket-description">
+            <i class="fas fa-align-left"></i>
+            Descripción
+          </label>
+          <textarea
+            id="ticket-description"
+            v-model="newBoardDescription"
+            placeholder="Describe detalladamente tu solicitud..."
+            class="form-textarea"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <!-- Selector de miembros -->
+        <div class="form-group">
+          <label>
+            <i class="fas fa-users"></i>
+            Asignar a miembros
+          </label>
+          <div class="members-selector">
+            <select v-model="selectedMember" class="form-input">
+              <option value="">Seleccionar miembro...</option>
+              <option
+                v-for="user in availableUsers"
+                :key="user._id"
+                :value="user"
+                :disabled="selectedMembers.some((m) => m._id === user._id)"
+              >
+                {{ user.nombre }} - {{ user.email }}
+              </option>
+            </select>
+            <button
+              type="button"
+              @click="addMember"
+              class="add-member-btn"
+              :disabled="!selectedMember"
+            >
+              <i class="fas fa-plus"></i> Agregar
+            </button>
+          </div>
+
+          <div v-if="selectedMembers.length > 0" class="selected-members">
+            <div class="selected-members-header">
+              <span>Miembros asignados:</span>
+              <span class="members-count">{{ selectedMembers.length }}</span>
+            </div>
+            <div class="members-list">
+              <div
+                v-for="member in selectedMembers"
+                :key="member._id"
+                class="member-tag"
+              >
+                <span>{{ member.nombre }}</span>
+                <button
+                  type="button"
+                  @click="removeMember(member._id)"
+                  class="remove-member-btn"
+                  title="Quitar miembro"
+                >
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Prioridad y Fecha Límite -->
+        <div class="form-row">
           <div class="form-group">
-            <label for="ticket-title">
-              <i class="fas fa-heading"></i>
-              Título del Ticket *
+            <label for="ticket-priority">
+              <i class="fas fa-flag"></i>
+              Prioridad
+            </label>
+            <select v-model="newBoardPriority" class="form-select">
+              <option value="baja">🟢 Baja</option>
+              <option value="media">🟡 Media</option>
+              <option value="alta">🔴 Alta</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="ticket-deadline">
+              <i class="fas fa-calendar"></i>
+              Fecha Límite
             </label>
             <input
-              id="ticket-title"
-              v-model="newBoardName"
-              type="text"
-              placeholder="Ej: Solicitud de acceso al sistema"
+              id="ticket-deadline"
+              v-model="newBoardDeadline"
+              type="date"
               class="form-input"
-              required
             />
           </div>
-
-          <div class="form-group">
-            <label for="ticket-description">
-              <i class="fas fa-align-left"></i>
-              Descripción
-            </label>
-            <textarea
-              id="ticket-description"
-              v-model="newBoardDescription"
-              placeholder="Describe detalladamente tu solicitud..."
-              class="form-textarea"
-              rows="4"
-            ></textarea>
-          </div>
-
-          <!-- Selector de miembros - NUEVO -->
-          <div class="form-group">
-            <label>
-              <i class="fas fa-users"></i>
-              Asignar a miembros
-            </label>
-            <div class="members-selector">
-              <select v-model="selectedMember" class="form-input">
-                <option value="">Seleccionar miembro...</option>
-                <option
-                  v-for="user in availableUsers"
-                  :key="user._id"
-                  :value="user"
-                  :disabled="selectedMembers.some((m) => m._id === user._id)"
-                >
-                  {{ user.nombre }} - {{ user.email }}
-                </option>
-              </select>
-              <button
-                type="button"
-                @click="addMember"
-                class="add-member-btn"
-                :disabled="!selectedMember"
-              >
-                <i class="fas fa-plus"></i> Agregar
-              </button>
-            </div>
-
-            <div v-if="selectedMembers.length > 0" class="selected-members">
-              <div class="selected-members-header">
-                <span>Miembros asignados:</span>
-                <span class="members-count">{{ selectedMembers.length }}</span>
-              </div>
-              <div class="members-list">
-                <div
-                  v-for="member in selectedMembers"
-                  :key="member._id"
-                  class="member-tag"
-                >
-                  <span>{{ member.nombre }}</span>
-                  <button
-                    type="button"
-                    @click="removeMember(member._id)"
-                    class="remove-member-btn"
-                    title="Quitar miembro"
-                  >
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="ticket-priority">
-                <i class="fas fa-flag"></i>
-                Prioridad
-              </label>
-              <select v-model="newBoardPriority" class="form-select">
-                <option value="baja">🟢 Baja</option>
-                <option value="media">🟡 Media</option>
-                <option value="alta">🔴 Alta</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="ticket-deadline">
-                <i class="fas fa-calendar"></i>
-                Fecha Límite
-              </label>
-              <input
-                id="ticket-deadline"
-                v-model="newBoardDeadline"
-                type="date"
-                class="form-input"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button @click="showCreateModal = false" class="btn-outline">
-            Cancelar
-          </button>
-          <button
-            @click="createBoard"
-            :disabled="!newBoardName || loading"
-            class="btn-primary"
-          >
-            <i class="fas fa-check"></i>
-            {{ loading ? "Creando..." : "Crear Ticket" }}
-          </button>
         </div>
       </div>
     </div>
+
+    <!-- FOOTER FIJO CON BOTONES -->
+    <div class="modal-footer">
+      <!-- Botón de email -->
+      <div class="email-section">
+        <button 
+          type="button" 
+          @click="sendEmailNotification" 
+          class="btn-email"
+          :disabled="!newBoardName"
+        >
+          <i class="fas fa-envelope"></i> Enviar notificación por email
+        </button>
+        <small class="email-note">
+          * Se abrirá Gmail con correo a: support@lwolf.com, technology@2costaricarealestate.com
+        </small>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="action-buttons">
+        <button @click="showCreateModal = false" class="btn-outline">
+          Cancelar
+        </button>
+        <button
+          @click="createBoard"
+          :disabled="!newBoardName || loading"
+          class="btn-primary"
+        >
+          <i class="fas fa-check"></i>
+          {{ loading ? "Creando..." : "Crear Ticket" }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+    <!-- Modal para editar ticket - NUEVO -->
+    <div v-if="showEditModal" class="modal-overlay" @click.self="showEditModal = false">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>
+        <i class="fas fa-edit"></i>
+        Editar Ticket
+      </h2>
+      <button @click="showEditModal = false" class="close-btn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- CONTENIDO CON SCROLL -->
+    <div class="modal-body-scrollable">
+      <div class="modal-body-content">
+        <div class="form-group">
+          <label for="edit-ticket-title">
+            <i class="fas fa-heading"></i>
+            Título del Ticket *
+          </label>
+          <input
+            id="edit-ticket-title"
+            v-model="editBoardData.nombre"
+            type="text"
+            placeholder="Ej: Solicitud de acceso al sistema"
+            class="form-input"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="edit-ticket-description">
+            <i class="fas fa-align-left"></i>
+            Descripción
+          </label>
+          <textarea
+            id="edit-ticket-description"
+            v-model="editBoardData.descripcion"
+            placeholder="Describe detalladamente tu solicitud..."
+            class="form-textarea"
+            rows="3"
+          ></textarea>
+        </div>
+
+        <!-- Selector de miembros para edición -->
+        <div class="form-group">
+          <label>
+            <i class="fas fa-users"></i>
+            Asignar a miembros
+          </label>
+          <div class="members-selector">
+            <select v-model="selectedEditMember" class="form-input">
+              <option value="">Seleccionar miembro...</option>
+              <option
+                v-for="user in availableUsers"
+                :key="user._id"
+                :value="user"
+                :disabled="editBoardData.miembros.some((m) => m._id === user._id)"
+              >
+                {{ user.nombre }} - {{ user.email }}
+              </option>
+            </select>
+            <button
+              type="button"
+              @click="addEditMember"
+              class="add-member-btn"
+              :disabled="!selectedEditMember"
+            >
+              <i class="fas fa-plus"></i> Agregar
+            </button>
+          </div>
+
+          <div v-if="editBoardData.miembros.length > 0" class="selected-members">
+            <div class="selected-members-header">
+              <span>Miembros asignados:</span>
+              <span class="members-count">{{ editBoardData.miembros.length }}</span>
+            </div>
+            <div class="members-list">
+              <div
+                v-for="member in editBoardData.miembros"
+                :key="member._id"
+                class="member-tag"
+              >
+                <span>{{ member.nombre }}</span>
+                <button
+                  type="button"
+                  @click="removeEditMember(member._id)"
+                  class="remove-member-btn"
+                  title="Quitar miembro"
+                >
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="edit-ticket-priority">
+              <i class="fas fa-flag"></i>
+              Prioridad
+            </label>
+            <select v-model="editBoardData.prioridad" class="form-select">
+              <option value="baja">🟢 Baja</option>
+              <option value="media">🟡 Media</option>
+              <option value="alta">🔴 Alta</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-ticket-deadline">
+              <i class="fas fa-calendar"></i>
+              Fecha Límite
+            </label>
+            <input
+              id="edit-ticket-deadline"
+              v-model="editBoardData.fecha_limite"
+              type="date"
+              class="form-input"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER FIJO CON BOTONES -->
+    <div class="modal-footer">
+      <!-- Botón de email para edición -->
+      <div class="email-section">
+        <button 
+          type="button" 
+          @click="sendEditEmailNotification" 
+          class="btn-email"
+          :disabled="!editBoardData.nombre"
+        >
+          <i class="fas fa-envelope"></i> Enviar notificación por email
+        </button>
+        <small class="email-note">
+          * Se abrirá Gmail con correo a: support@lwolf.com, technology@2costaricarealestate.com
+        </small>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="action-buttons">
+        <button @click="showEditModal = false" class="btn-outline">
+          Cancelar
+        </button>
+        <button
+          @click="updateBoard"
+          :disabled="!editBoardData.nombre || loading"
+          class="btn-primary"
+        >
+          <i class="fas fa-save"></i>
+          {{ loading ? "Guardando..." : "Guardar Cambios" }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
     <!-- Contenido principal -->
     <div class="dashboard-content">
@@ -260,6 +440,16 @@
                 <option value="pendiente">⏳ Pendiente</option>
                 <option value="completado">✅ Completado</option>
               </select>
+
+              <!-- Botón de editar - NUEVO -->
+              <button
+                @click="editBoard(board)"
+                class="btn-icon btn-edit"
+                title="Editar"
+              >
+                <i class="fas fa-edit"></i>
+              </button>
+
               <button
                 @click="deleteBoard(board._id)"
                 class="btn-icon btn-delete"
@@ -288,7 +478,10 @@
 
               <div class="meta-item">
                 <i class="fas fa-user"></i>
-                <span class="meta-label">Por: {{ board.creador?.nombre || 'Usuario desconocido' }}</span>
+                <span class="meta-label"
+                  >Por:
+                  {{ board.creador?.nombre || "Usuario desconocido" }}</span
+                >
               </div>
 
               <!-- Miembros asignados - NUEVO -->
@@ -404,7 +597,16 @@ const newBoardDeadline = ref("");
 const filterState = ref("");
 const selectedMember = ref<User | null>(null);
 const selectedMembers = ref<User[]>([]);
-
+const showEditModal = ref(false);
+const editBoardData = ref({
+  _id: "",
+  nombre: "",
+  descripcion: "",
+  prioridad: "media",
+  fecha_limite: "",
+  miembros: [] as User[],
+});
+const selectedEditMember = ref<User | null>(null);
 const api = axios.create({
   baseURL: API_URL,
 });
@@ -501,56 +703,61 @@ const resetForm = () => {
 };
 
 const createBoard = async () => {
-  if (!newBoardName.value.trim()) return
+  if (!newBoardName.value.trim()) return;
 
-  loading.value = true
+  loading.value = true;
   try {
-    const memberIds = selectedMembers.value.map(m => m._id)
-    
+    const memberIds = selectedMembers.value.map((m) => m._id);
+
     const ticketData: any = {
       nombre: newBoardName.value.trim(),
       descripcion: newBoardDescription.value,
       prioridad: newBoardPriority.value,
-      miembros: memberIds // Enviar IDs de miembros seleccionados
-    }
+      miembros: memberIds, // Enviar IDs de miembros seleccionados
+    };
 
     if (newBoardDeadline.value) {
-      ticketData.fecha_limite = newBoardDeadline.value
+      ticketData.fecha_limite = newBoardDeadline.value;
     }
 
-    const response = await api.post('/boards', ticketData)
-    
+    const response = await api.post("/boards", ticketData);
+
     // Asegurar que la respuesta tenga la estructura correcta
     const newBoard = {
       ...response.data,
-      miembros: Array.isArray(response.data.miembros) ? response.data.miembros : []
-    }
-    
-    boards.value.push(newBoard)
-    
+      miembros: Array.isArray(response.data.miembros)
+        ? response.data.miembros
+        : [],
+    };
+
+    boards.value.push(newBoard);
+
     // Reset form
-    resetForm()
-    showCreateModal.value = false
+    resetForm();
+    showCreateModal.value = false;
   } catch (error: any) {
-    console.error('Error creating board:', error)
-    alert('Error al crear el ticket: ' + (error.response?.data?.message || error.message))
+    console.error("Error creating board:", error);
+    alert(
+      "Error al crear el ticket: " +
+        (error.response?.data?.message || error.message)
+    );
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 const getSafeNombre = (user: any) => {
-  if (!user) return 'Sin nombre'
+  if (!user) return "Sin nombre";
   // Verificar si es un objeto de usuario o solo un string/ID
-  if (typeof user === 'object' && user !== null) {
-    return user.nombre || user.email || 'Usuario sin nombre'
+  if (typeof user === "object" && user !== null) {
+    return user.nombre || user.email || "Usuario sin nombre";
   }
-  return 'Usuario sin nombre'
-}
+  return "Usuario sin nombre";
+};
 
 const getFirstName = (user: any) => {
-  const nombre = getSafeNombre(user)
-  return nombre.split(' ')[0]
-}
+  const nombre = getSafeNombre(user);
+  return nombre.split(" ")[0];
+};
 
 const updateBoardStatus = async (boardId: string, newStatus: string) => {
   try {
@@ -577,6 +784,139 @@ const deleteBoard = async (boardId: string) => {
     console.error("Error deleting board:", error);
   }
 };
+const editBoard = (board: Board) => {
+  editBoardData.value = {
+    _id: board._id,
+    nombre: board.nombre,
+    descripcion: board.descripcion || "",
+    prioridad: board.prioridad,
+    fecha_limite: board.fecha_limite ? board.fecha_limite.split("T")[0] : "",
+    miembros: [...board.miembros],
+  };
+  selectedEditMember.value = null;
+  showEditModal.value = true;
+};
+
+const addEditMember = () => {
+  if (
+    selectedEditMember.value &&
+    !editBoardData.value.miembros.some(
+      (m) => m._id === selectedEditMember.value!._id
+    )
+  ) {
+    editBoardData.value.miembros.push(selectedEditMember.value);
+    selectedEditMember.value = null;
+  }
+};
+
+const removeEditMember = (memberId: string) => {
+  editBoardData.value.miembros = editBoardData.value.miembros.filter(
+    (m) => m._id !== memberId
+  );
+};
+
+const updateBoard = async () => {
+  if (!editBoardData.value.nombre.trim()) return;
+
+  loading.value = true;
+  try {
+    const memberIds = editBoardData.value.miembros.map((m) => m._id);
+
+    const updateData: any = {
+      nombre: editBoardData.value.nombre.trim(),
+      descripcion: editBoardData.value.descripcion,
+      prioridad: editBoardData.value.prioridad,
+      miembros: memberIds,
+    };
+
+    if (editBoardData.value.fecha_limite) {
+      updateData.fecha_limite = editBoardData.value.fecha_limite;
+    }
+
+    const response = await api.put(
+      `/boards/${editBoardData.value._id}`,
+      updateData
+    );
+
+    // Actualizar el board en la lista
+    const index = boards.value.findIndex(
+      (b) => b._id === editBoardData.value._id
+    );
+    if (index !== -1) {
+      boards.value[index] = response.data;
+    }
+
+    showEditModal.value = false;
+  } catch (error: any) {
+    console.error("Error updating board:", error);
+    alert(
+      "Error al actualizar el ticket: " +
+        (error.response?.data?.message || error.message)
+    );
+  } finally {
+    loading.value = false;
+  }
+};
+// Notificacion de email
+const sendEmailNotification = () => {
+  const emails = ",technology@2costaricarealestate.com";
+  const subject = `New Ticket: ${newBoardName.value}`;
+
+  const body = `
+
+Description: ${newBoardDescription.value}
+
+
+
+Assigned members:
+${
+  selectedMembers.value.map((m) => `- ${m.nombre} (${m.email})`).join("\n") ||
+  "No member assigned"
+}
+
+This is an automated message from the ticket system.
+  `.trim();
+
+  // Codificar para URL
+  const encodedSubject = encodeURIComponent(subject);
+  const encodedBody = encodeURIComponent(body);
+
+  // Abrir Gmail con múltiples destinatarios
+  window.open(
+    `https://mail.google.com/mail/?view=cm&fs=1&to=${emails}&su=${encodedSubject}&body=${encodedBody}`,
+    "_blank"
+  );
+};
+// Método para edición
+const sendEditEmailNotification = () => {
+  const emails = "support@lwolf.com,technology@2costaricarealestate.com";
+  const subject = `${editBoardData.value.nombre}`;
+
+  const body = `
+
+Description: ${editBoardData.value.descripcion}
+
+
+Assigned members:
+${
+  editBoardData.value.miembros
+    .map((m) => `- ${m.nombre} (${m.email})`)
+    .join("\n") || "No member assigned"
+}
+
+This is an automated message from the ticket system.
+  `.trim();
+
+  // Codificar para URL
+  const encodedSubject = encodeURIComponent(subject);
+  const encodedBody = encodeURIComponent(body);
+
+  // Abrir Gmail con múltiples destinatarios
+  window.open(
+    `https://mail.google.com/mail/?view=cm&fs=1&to=${emails}&su=${encodedSubject}&body=${encodedBody}`,
+    "_blank"
+  );
+};
 
 const handleLogout = () => {
   localStorage.removeItem("token");
@@ -591,8 +931,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
-@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 * {
   margin: 0;
@@ -603,7 +943,7 @@ onMounted(() => {
 .tickets-dashboard {
   min-height: 100vh;
   background: linear-gradient(135deg, #0d505a 0%, #1e4d58 100%);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   padding: 20px;
 }
 
@@ -885,6 +1225,8 @@ onMounted(() => {
   overflow: hidden;
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
   border-top: 4px solid #0d505a;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-header {
@@ -893,8 +1235,21 @@ onMounted(() => {
   align-items: center;
   padding: 24px;
   border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
 }
 
+.modal-body-scrollable {
+  flex: 1;
+  overflow-y: auto;
+  max-height: calc(90vh - 200px);
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
 .modal-header h2 {
   margin: 0;
   color: #1e4d58;
@@ -925,7 +1280,7 @@ onMounted(() => {
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .form-group label {
@@ -938,7 +1293,9 @@ onMounted(() => {
   gap: 8px;
 }
 
-.form-input, .form-textarea, .form-select {
+.form-input,
+.form-textarea,
+.form-select {
   width: 100%;
   padding: 12px 16px;
   border: 2px solid #e2e8f0;
@@ -948,7 +1305,9 @@ onMounted(() => {
   font-family: inherit;
 }
 
-.form-input:focus, .form-textarea:focus, .form-select:focus {
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
   outline: none;
   border-color: #0d505a;
   box-shadow: 0 0 0 3px rgba(13, 80, 90, 0.1);
@@ -964,13 +1323,17 @@ onMounted(() => {
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
-
+.footer-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
 .modal-footer {
   padding: 24px;
   border-top: 1px solid #e2e8f0;
   display: flex;
-  justify-content: flex-end;
-  gap: 12px;
+  flex-direction: column;
+  gap: 16px;
 }
 
 /* NUEVOS ESTILOS PARA SELECTOR DE MIEMBROS */
@@ -1263,7 +1626,7 @@ onMounted(() => {
 .ticket-id {
   font-size: 11px;
   color: #838383;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-weight: 600;
 }
 
@@ -1317,7 +1680,8 @@ onMounted(() => {
 }
 
 /* Loading and empty states */
-.loading-container, .empty-state {
+.loading-container,
+.empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1338,8 +1702,12 @@ onMounted(() => {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .empty-icon {
@@ -1384,6 +1752,48 @@ onMounted(() => {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
+/* Agregar estos estilos */
+.email-section {
+  text-align: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 16px;
+}
+
+.btn-email {
+  background: linear-gradient(135deg, #0d505a 0%, #1e4d58 100%);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+btn-email:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 80, 90, 0.3);
+}
+
+.btn-email:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.email-note {
+  color: #6f9096;
+  font-size: 11px;
+  display: block;
+  margin-top: 6px;
+  line-height: 1.3;
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -1425,9 +1835,18 @@ onMounted(() => {
     grid-template-columns: 1fr;
   }
 
-  .modal-content {
-    width: 95%;
-    margin: 20px;
+ .modal-content {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+  .btn-edit {
+    color: #0d505a;
+  }
+
+  .btn-edit:hover {
+    background: #e8f5f0;
+    border-color: #0d505a;
+    color: #1e4d58;
   }
 }
 
@@ -1444,6 +1863,58 @@ onMounted(() => {
   .stats {
     flex-direction: column;
     gap: 12px;
+  }
+}
+@media (max-width: 768px) {
+  .footer-buttons {
+    flex-direction: column;
+  }
+  
+  .footer-buttons button {
+    width: 100%;
+  }
+  
+  .email-section {
+    padding: 12px;
+  }
+}
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    margin: 20px;
+  }
+  
+  .modal-header,
+  .modal-body-content,
+  .modal-footer {
+    padding: 16px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .action-buttons button {
+    width: 100%;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-body-scrollable {
+    max-height: calc(90vh - 180px);
+  }
+  
+  .members-selector {
+    flex-direction: column;
+  }
+  
+  .add-member-btn {
+    margin-top: 8px;
   }
 }
 </style>

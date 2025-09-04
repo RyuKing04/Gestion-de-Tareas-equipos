@@ -116,7 +116,8 @@ export const updateBoard = async (req, res) => {
         fecha_actualizacion: new Date()
       },
       { new: true, runValidators: true }
-    ).populate('creador', 'nombre email');
+    ).populate('creador', 'nombre email')
+    .populate('miembros', 'nombre email');
 
     if (!board) {
       return res.status(404).json({ message: "Tablero no encontrado" });
