@@ -859,7 +859,7 @@ const updateBoard = async () => {
 };
 // Notificacion de email
 const sendEmailNotification = () => {
-  const emails = ",technology@2costaricarealestate.com";
+  const emails = "support@lwolf.com,technology@2costaricarealestate.com,";
   const subject = `New Ticket: ${newBoardName.value}`;
 
   const body = `
