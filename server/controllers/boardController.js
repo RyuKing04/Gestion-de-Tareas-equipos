@@ -1,9 +1,10 @@
+
 import Board from "../models/Board.js";
+import sendEmail from "../utils/sendEmail.js";
 
 export const createBoard = async (req, res) => {
   try {
     const { nombre, descripcion, prioridad, fecha_limite, miembros } = req.body;
-    
     if (!nombre || nombre.trim() === '') {
       return res.status(400).json({ message: "El nombre del tablero es requerido" });
     }
@@ -23,13 +24,40 @@ export const createBoard = async (req, res) => {
       miembros: miembrosIds, // Usar los IDs de miembros proporcionados
       estado: 'nuevo'
     });
-    
+
     await board.save();
-    
+
     // Hacer populate de creador Y miembros
     await board.populate('creador', 'nombre email');
     await board.populate('miembros', 'nombre email');
-    
+
+    // Enviar correo automático
+    try {
+      // Email para el creador
+      if (board.creador && board.creador.email) {
+        await sendEmail({
+          to: board.creador.email,
+          subject: `Nuevo Ticket Creado: ${board.nombre}`,
+          text: `Se ha creado un nuevo ticket en el sistema.\n\nTítulo: ${board.nombre}\nDescripción: ${board.descripcion || 'Sin descripción'}\nPrioridad: ${board.prioridad}\nEstado: ${board.estado}\n${board.fecha_limite ? `Fecha Límite: ${new Date(board.fecha_limite).toLocaleDateString('es-ES')}` : ''}\n\nMiembros asignados:\n${board.miembros && board.miembros.length > 0 ? board.miembros.map(m => `- ${m.nombre} (${m.email})`).join('\n') : 'No hay miembros asignados'}\n\nPuedes ver y gestionar el ticket en el sistema.\n\nEste es un mensaje automático del sistema de tickets.`
+        });
+      }
+      // Email para cada miembro asignado (excepto el creador)
+      if (board.miembros && board.miembros.length > 0) {
+        for (const member of board.miembros) {
+          if (member.email && member.email !== board.creador.email) {
+            await sendEmail({
+              to: member.email,
+              subject: `Has sido asignado a un nuevo ticket: ${board.nombre}`,
+              text: `Has sido asignado como miembro de un nuevo ticket.\n\nTítulo: ${board.nombre}\nDescripción: ${board.descripcion || 'Sin descripción'}\nPrioridad: ${board.prioridad}\nEstado: ${board.estado}\n${board.fecha_limite ? `Fecha Límite: ${new Date(board.fecha_limite).toLocaleDateString('es-ES')}` : ''}\n\nCreado por: ${board.creador.nombre} (${board.creador.email})\n\nPor favor, revisa el ticket en el sistema para más detalles y actualizaciones.\n\nEste es un mensaje automático del sistema de tickets.`
+            });
+          }
+        }
+      }
+    } catch (emailError) {
+      console.error('Error enviando notificaciones automáticas por email:', emailError);
+      // No interrumpe la creación del ticket
+    }
+
     res.status(201).json(board);
   } catch (error) {
     console.error("Error creating board:", error);

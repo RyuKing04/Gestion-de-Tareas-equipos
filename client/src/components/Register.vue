@@ -3,11 +3,7 @@
     <div class="register-card">
       <div class="register-header">
         <div class="logo-container">
-          <span class="logo-text">2</span>
-          <div class="logo-details">
-            <span class="logo-country">COSTA RICA</span>
-            <span class="logo-company">REAL ESTATE</span>
-          </div>
+          <img src="/logo-full-color.png" alt="Logo 2CRRE" class="logo-img" />
         </div>
         <h1>Crear Cuenta</h1>
         <p>Únete a Tickets 2CRRE</p>
@@ -205,7 +201,6 @@ const goToLogin = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
   margin-bottom: 20px;
   padding: 12px;
   background: rgba(255, 255, 255, 0.15);
@@ -213,35 +208,12 @@ const goToLogin = () => {
   backdrop-filter: blur(10px);
 }
 
-.logo-text {
-  font-size: 28px;
-  font-weight: 800;
-  background: white;
-  color: #0d505a;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.logo-details {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.2;
-}
-
-.logo-country {
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.logo-company {
-  font-size: 14px;
-  font-weight: 600;
+.logo-img {
+  max-width: 120px;
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 .register-header h1 {

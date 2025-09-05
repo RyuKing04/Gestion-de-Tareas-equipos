@@ -4,13 +4,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
-          <div class="logo-container">
-            <span class="logo-text">2</span>
-            <div class="logo-details">
-              <span class="logo-country">COSTA RICA</span>
-              <span class="logo-company">REAL ESTATE</span>
-            </div>
-          </div>
+          <img src="/logo-full-color.png" alt="Logo" class="main-logo-img" />
         </a>
         <button 
           class="navbar-toggler" 
@@ -115,7 +109,15 @@ body {
   background-color: rgba(255, 255, 255, 0.1);
   transform: translateY(-1px);
 }
-
+.main-logo-img {
+  height: 100px;
+  width: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(13, 80, 90, 0.10);
+  background: white;
+  padding: 2px 6px;
+  object-fit: contain;
+}
 /* Ajustes responsivos */
 @media (max-width: 768px) {
   .logo-container {
